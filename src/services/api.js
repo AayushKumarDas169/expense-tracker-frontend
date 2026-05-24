@@ -2,7 +2,7 @@ import axios from "axios";
 
 // 🚀 FIXED: Pointing directly to your working live Railway backend container with the correct /api suffix routing route track
 const BACKEND_URL = process.env.NODE_ENV === "production" 
-  ? "https://expense-tracker-backend-production-eb7d.up.railway.app/api"  
+  ? "expense-tracker-backend-new-phi.vercel.app/api"  
   : "http://localhost:5000/api";
 
 const api = axios.create({
