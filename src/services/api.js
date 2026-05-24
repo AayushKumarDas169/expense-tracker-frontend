@@ -1,8 +1,8 @@
 import axios from "axios";
 
-// 🚀 FIXED: Pointing directly to your working live Railway backend container with the correct /api suffix routing route track
+// 🚀 FIXED: Added https:// to make it a true, absolute cloud network address
 const BACKEND_URL = process.env.NODE_ENV === "production" 
-  ? "expense-tracker-backend-new-phi.vercel.app/api"  
+  ? "https://expense-tracker-backend-new-phi.vercel.app/api"  
   : "http://localhost:5000/api";
 
 const api = axios.create({
@@ -15,11 +15,9 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
-
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-
     return config;
   },
   (error) => Promise.reject(error)
