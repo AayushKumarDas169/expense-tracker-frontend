@@ -47,8 +47,9 @@ function LoginPage() {
         navigate('/dashboard');
       }, 1200); // 🚀 Maintained for premium auth loading transition sequence completion
     } catch (err) {
-      toast.error(err.response?.data?.error || 'Invalid credentials');
-      setSubmitting(false);
+      const errMsg = err.response?.data?.error || err.response?.data?.message || 'Invalid credentials';
+       toast.error(errMsg);
+       setSubmitting(false);
     }
   };
 
@@ -67,8 +68,9 @@ function LoginPage() {
         navigate('/dashboard');
       }, 1200);
     } catch (err) {
-      toast.error(err.response?.data?.error || 'Registration failed');
-      setSubmitting(false);
+       const errMsg = err.response?.data?.error || err.response?.data?.message || 'Registration failed';
+        toast.error(errMsg);
+        setSubmitting(false);
     }
   };
 
