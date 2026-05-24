@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import api from "../services/api"; // Ensure this matches your Axios configuration file path
+import api from "../services/api"; 
 
 const AuthContext = createContext();
 
@@ -14,22 +14,33 @@ export function AuthProvider({ children }) {
     }
   }, [token]);
 
-  // 🚀 FIXED: Rewritten as an async pipeline to return backend data cleanly
+  // 1. LOGIN PIPELINE
   const login = async (email, password) => {
-    const response = await api.post('/auth/login', { email, password });
-    if (response.data && response.data.token) {
-      setToken(response.data.token);
+    try {
+      const response = await api.post('/auth/login', { email, password });
+      if (response.data && response.data.token) {
+        setToken(response.data.token);
+      }
+      return response.data;
+    } catch (error) {
+      // Forward the exact error message from the backend down to the UI
+      throw error;
     }
-    return response.data;
   };
 
-  // 🚀 FIXED: Links your frontend registration actions to your backend routes
+  // 2. REGISTER PIPELINE WITH AUTO-LOGIN HOOK
   const register = async (email, password) => {
-    const response = await api.post('/auth/register', { email, password });
-    if (response.data && response.data.token) {
-      setToken(response.data.token);
+    try {
+      // Step A: Hit the registration database endpoint
+      await api.post('/auth/register', { email, password });
+      
+      // Step B: Auto-Login the user right away so navigate('/dashboard') works flawlessly!
+      const loginData = await login(email, password);
+      return loginData;
+    } catch (error) {
+      // Forward the exact error message from the backend down to the UI
+      throw error;
     }
-    return response.data;
   };
 
   const logout = () => {
